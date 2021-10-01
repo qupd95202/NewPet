@@ -4,7 +4,32 @@ public abstract class Item implements Tradable {
     private int amount = 0;
     private String name;
     private String usage;
-    private Global.ItemType type;
+    private ItemType type;
+
+    public enum ItemType {
+        DOGHAIR("狗毛"),
+        CATHAIR("貓毛"),
+        FISHSCALE("魚鱗"),
+        SAWDUST("木屑"),
+        CANNEDFOOD("罐頭食物"),
+        FISHFOOD("魚飼料"),
+        INSECTFOOD("昆蟲飼料"),
+        CARTON("紙箱"),
+        SEAWEED("海草"),
+        WOODHOUSE("木屋"),
+        BAGADDING("背包格擴充物件"),
+        ANIMALROOMADDING("寵物格擴充物件");
+
+        private String name;
+
+        ItemType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
 
     public Item() {
 
@@ -22,7 +47,7 @@ public abstract class Item implements Tradable {
         return usage;
     }
 
-    public Global.ItemType getType() {
+    public ItemType getType() {
         return type;
     }
 
@@ -34,7 +59,7 @@ public abstract class Item implements Tradable {
         this.usage = usage;
     }
 
-    public void setType(Global.ItemType type) {
+    public void setType(ItemType type) {
         this.type = type;
     }
 

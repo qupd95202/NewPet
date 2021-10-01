@@ -23,6 +23,18 @@ public class Input {
     }
 
     public static int buyAmount() {
-        return genNumber(0,Global.BUYING_MAX_AMOUNT);
+        return genNumber(0, Global.BUYING_MAX_AMOUNT);
+    }
+
+    public static String word() {
+        String word = sc.nextLine();
+        if (word.length() > Global.NAME_LIMIT) {
+            return word();
+        }
+        int leftNumber = Global.NAME_LIMIT - word.length();
+        for (int i = 0; i < leftNumber; i++) {
+            word += " ";
+        }
+        return word;
     }
 }

@@ -1,5 +1,6 @@
 package Game;
 
+import Animal.Animal;
 import BuffItem.AnimalRoomAdding;
 import BuffItem.BagAdding;
 import Decoration.Carton;
@@ -16,27 +17,7 @@ public class Global {
     public final static int INITIAL_FOOD_AMOUNT = 5;
     public final static int BUYING_MAX_AMOUNT = 20;
     public static final int ITEM_MAX_AMOUNT = 20;
-
-    public enum ItemType {
-        DOGHAIR("狗毛"),
-        CATHAIR("貓毛"),
-        FISHSCALE("魚鱗"),
-        SAWDUST("木屑"),
-        CANNEDFOOD("罐頭食物"),
-        FISHFOOD("魚飼料"),
-        INSECTFOOD("昆蟲飼料"),
-        CARTON("紙箱"),
-        SEAWEED("海草"),
-        WOODHOUSE("木屋"),
-        BAGADDING("背包格擴充物件"),
-        ANIMALROOMADDING("寵物格擴充物件");
-
-        private String name;
-
-        ItemType(String name) {
-            this.name = name;
-        }
-    }
+    public final static int NAME_LIMIT = 8;
 
     public enum AnimalType {
         CAT,
@@ -45,41 +26,41 @@ public class Global {
         Insect;
     }
 
-    public static Item genItem(Global.ItemType itemType) {
-        if (itemType == Global.ItemType.BAGADDING) {
+    public static Item genItem(Item.ItemType itemType) {
+        if (itemType == Item.ItemType.BAGADDING) {
             return new BagAdding();
         }
-        if (itemType == Global.ItemType.ANIMALROOMADDING) {
+        if (itemType == Item.ItemType.ANIMALROOMADDING) {
             return new AnimalRoomAdding();
         }
-        if (itemType == Global.ItemType.CARTON) {
+        if (itemType == Item.ItemType.CARTON) {
             return new Carton();
         }
-        if (itemType == ItemType.SEAWEED) {
+        if (itemType == Item.ItemType.SEAWEED) {
             return new Seaweed();
         }
-        if (itemType == ItemType.WOODHOUSE) {
+        if (itemType == Item.ItemType.WOODHOUSE) {
             return new WoodHouse();
         }
-        if (itemType == ItemType.CATHAIR) {
+        if (itemType == Item.ItemType.CATHAIR) {
             return new CatHair();
         }
-        if (itemType == ItemType.DOGHAIR) {
+        if (itemType == Item.ItemType.DOGHAIR) {
             return new DogHair();
         }
-        if (itemType == ItemType.FISHSCALE) {
+        if (itemType == Item.ItemType.FISHSCALE) {
             return new FishScale();
         }
-        if (itemType == ItemType.SAWDUST) {
+        if (itemType == Item.ItemType.SAWDUST) {
             return new Seaweed();
         }
-        if (itemType == ItemType.CANNEDFOOD) {
+        if (itemType == Item.ItemType.CANNEDFOOD) {
             return new CannedFood();
         }
-        if (itemType == ItemType.FISHFOOD) {
+        if (itemType == Item.ItemType.FISHFOOD) {
             return new Fishfood();
         }
-        if (itemType == ItemType.INSECTFOOD) {
+        if (itemType == Item.ItemType.INSECTFOOD) {
             return new InsectFood();
         }
         return null;

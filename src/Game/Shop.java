@@ -62,21 +62,21 @@ public class Shop {
         int choice = Input.genNumber(1, 6);
         switch (choice) {
             case 1:
-                return Global.genItem(Global.ItemType.CANNEDFOOD);
+                return Global.genItem(Item.ItemType.CANNEDFOOD);
             case 2:
-                return Global.genItem(Global.ItemType.FISHFOOD);
+                return Global.genItem(Item.ItemType.FISHFOOD);
             case 3:
-                return Global.genItem(Global.ItemType.INSECTFOOD);
+                return Global.genItem(Item.ItemType.INSECTFOOD);
             case 4:
-                return Global.genItem(Global.ItemType.CARTON);
+                return Global.genItem(Item.ItemType.CARTON);
             case 5:
-                return Global.genItem(Global.ItemType.SEAWEED);
+                return Global.genItem(Item.ItemType.SEAWEED);
             case 6:
-                return Global.genItem(Global.ItemType.WOODHOUSE);
+                return Global.genItem(Item.ItemType.WOODHOUSE);
             case 7:
-                return Global.genItem(Global.ItemType.BAGADDING);
+                return Global.genItem(Item.ItemType.BAGADDING);
             case 8:
-                return Global.genItem(Global.ItemType.ANIMALROOMADDING);
+                return Global.genItem(Item.ItemType.ANIMALROOMADDING);
             default:
                 return null;
         }

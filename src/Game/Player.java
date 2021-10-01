@@ -1,6 +1,7 @@
 package Game;
 
 import BuffItem.Usable;
+import Animal.*;
 
 import java.util.ArrayList;
 
@@ -129,7 +130,7 @@ public class Player {
      * @param animal
      */
     public void naming(Animal animal, String name) {
-
+        animal.setName(name);
     }
 
     /**
@@ -138,6 +139,7 @@ public class Player {
      * @param animal
      */
     public void walking(Animal animal) {
+        animal.walk();
     }
 
     /**
@@ -148,12 +150,7 @@ public class Player {
      * @return
      */
     public boolean feed(Animal animal, Item item) {
-        if (item.getType() != Global.ItemType.FISHFOOD ||
-                item.getType() != Global.ItemType.INSECTFOOD ||
-                item.getType() != Global.ItemType.CANNEDFOOD) {
-            return false;
-        }
-        return true;
+        return animal.eat(item.getType());
     }
 
     /**
@@ -164,27 +161,23 @@ public class Player {
      * @return
      */
     public boolean connect(Animal animal, Animal animal2) {
-        if (animal == animal2) {
-            return false;
-        }
-        return true;
+        return animal.connect(animal2);
     }
 
     /**
      * 選擇兩隻寵物取消連結
      *
      * @param animal
-     * @param animal2
      * @return
      */
-    public boolean disconnect(Animal animal, Animal animal2) {
-        return true;
+    public boolean disconnect(Animal animal) {
+        return animal.disConnect();
     }
 
     /**
      * 裝飾寵物房間
      */
-    public boolean decorate(Animal animal, Item item) {
+    public boolean decorate(Animal animal, Item item) { ///////><
         return true;
     }
 
@@ -193,8 +186,8 @@ public class Player {
      *
      * @return
      */
-    public boolean clean(Animal animal) {
-        return true;
+    public void clean(Animal animal) {
+       animal.clean();
     }
 
     /**
@@ -204,7 +197,7 @@ public class Player {
      */
     public boolean isGameOver() {
         for (Animal animal : animalRoom) {
-
+            animal.
         }
         return true;
     }
@@ -233,9 +226,17 @@ public class Player {
         return true;
     }
 
+    /**
+     * 使用加成道具
+     *
+     * @param usable
+     */
     public void use(Usable usable) {
-        if(((Item)usable).getType()== Global.ItemType.ANIMALROOMADDING) {
-
+        if (((Item) usable).getType() == Global.ItemType.ANIMALROOMADDING) {
+            animalRoomMax += usable.getBuffNumber();
+        }
+        if (((Item) usable).getType() == Global.ItemType.BAGADDING) {
+            bagMax += usable.getBuffNumber();
         }
     }
 
@@ -254,13 +255,24 @@ public class Player {
 //    public int getActionTime() {
 //        return actionTime;
 //    }
-
     public int getMoney() {
         return money;
     }
 
+    /**
+     * 減少錢包的錢
+     *
+     * @param price
+     */
     public void costMoney(int price) {
+        money -= price;
+    }
 
+    /**
+     * 增加錢包的錢
+     */
+    public void addMoney(int price) {
+        money += price;
     }
 
     /**
@@ -269,7 +281,7 @@ public class Player {
      * @return
      */
     private ArrayList chooseNumerousAnimal() {
-        ArrayList<Game.Animal> animals = new ArrayList<>();
+        ArrayList<Animal> animals = new ArrayList<>();
         int index = -1;
         while (true) {
             index = Input.genNumber(0, animalRoom.size());
