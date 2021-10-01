@@ -6,6 +6,10 @@ public abstract class Item implements Tradable {
     private String usage;
     private Global.ItemType type;
 
+    public Item() {
+
+    }
+
     public String getName() {
         return name;
     }

@@ -16,8 +16,13 @@ public class Input {
             return genNumber(min, max);
         }
         if (number < min || number > max) {
+            System.out.println("輸入有誤");
             return genNumber(min, max);
         }
         return number;
+    }
+
+    public static int buyAmount() {
+        return genNumber(0,Global.BUYING_MAX_AMOUNT);
     }
 }

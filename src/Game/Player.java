@@ -1,5 +1,7 @@
 package Game;
 
+import BuffItem.Usable;
+
 import java.util.ArrayList;
 
 
@@ -9,7 +11,7 @@ public class Player {
     private int animalRoomMax = 10;
     private int money;
     private ArrayList<Animal> animalRoom = new ArrayList<>();
-    private int ActionTime = 0;
+//    private int actionTime = 0;
 
     public Player() {
         money = 1000;
@@ -231,20 +233,34 @@ public class Player {
         return true;
     }
 
+    public void use(Usable usable) {
+        if(((Item)usable).getType()== Global.ItemType.ANIMALROOMADDING) {
+
+        }
+    }
+
     /**
      * 動作時間增加
      */
-    public void nextAction() {
-        ActionTime++;
-    }
+//    public void nextAction() {
+//        actionTime++;
+//    }
 
     /**
      * 取得動作時間
      *
      * @return
      */
-    public int getActionTime() {
-        return ActionTime;
+//    public int getActionTime() {
+//        return actionTime;
+//    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void costMoney(int price) {
+
     }
 
     /**
