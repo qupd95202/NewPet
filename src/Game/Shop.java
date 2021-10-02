@@ -1,82 +1,73 @@
 package Game;
 
-import Decoration.*;
-import Food.*;
-import BuffItem.*;
-
-import java.util.ArrayList;
+import Animal.*;
+import Item.*;
 
 public class Shop {
-    private ArrayList<Item> shopList = new ArrayList<>();
-
     public Shop() {
-        shopList.add(new CannedFood());
-        shopList.add(new Fishfood());
-        shopList.add(new InsectFood());
-        shopList.add(new Carton());
-        shopList.add(new Seaweed());
-        shopList.add(new WoodHouse());
-        shopList.add(new BagAdding());
-        shopList.add(new AnimalRoomAdding());
     }
 
-
-    /**
-     * 販售商品
-     *
-     * @param item   要販售的物品
-     * @param amount 販售數量
-     * @return 賣出後獲得的錢
-     */
-    public int sellItem(Item item, int amount) {
-        int sellMoney = item.getSellOutPrice() * amount;
-        return sellMoney;
+    public void showItemList() {
+        System.out.println("1.罐頭飼料 售價：5 用途：只能給貓及狗吃 ");
+        System.out.println("2.魚飼料   \t售價：4 \t用途：只能給魚吃 ");
+        System.out.println("3.昆蟲飼料  \t售價：3 \t用途：只能給昆蟲吃 ");
+        System.out.println("4.紙箱   \t售價：3 \t裝飾在寵物屋中，每個寵物屋限放一個(適合寵物:狗、貓) ");
+        System.out.println("5.海草   \t售價：3 \t裝飾在寵物屋中，每個寵物屋限放一個(適合寵物:魚) ");
+        System.out.println("6.木屋   \t售價：3 \t裝飾在寵物屋中，每個寵物屋限放一個(適合寵物:狗、昆蟲) ");
     }
 
-    /**
-     * 購買物品是否成功
-     *
-     * @param money  player持有的錢
-     * @param item   購買的物品
-     * @param amount 購買數量
-     * @return 錢是否足夠
-     */
-    public boolean buyItem(int money, Item item, int amount) {
-        if (money - (item.getBuyInPrice() * amount) < 0) {
-            return false;
-        }
-        return true;
+    public void showBuffItemList() {
+        System.out.println("1.擴增背包格 售價：10 用途：背包格+ ");
+        System.out.println("2.擴增寵物格  \t售價：10 \t用途：寵物格+ ");
     }
 
-    public void showShopList() {
-        for (int i = 0; i < shopList.size(); i++) {
-            System.out.println(shopList.get(i).itemExplanation());
-        }
+    public void showAnimalList() {
+        System.out.println("1.狗 \t售價：20  ");
+        System.out.println("2.貓 \t售價：15 ");
+        System.out.println("2.魚 \t售價：10 ");
+        System.out.println("2.蟲 \t售價：10 ");
     }
 
-    public int howMuch(Item item, int amount) {
-        return item.getBuyInPrice() * amount;
-    }
-
-    public static Item genBuyingItem() {
-        int choice = Input.genNumber(1, 6);
+    public Item genBuyingItem(int choice) {
         switch (choice) {
             case 1:
-                return Global.genItem(Item.ItemType.CANNEDFOOD);
+                return Global.genItem(Item.Type.CANNEDFOOD);
             case 2:
-                return Global.genItem(Item.ItemType.FISHFOOD);
+                return Global.genItem(Item.Type.FISHFOOD);
             case 3:
-                return Global.genItem(Item.ItemType.INSECTFOOD);
+                return Global.genItem(Item.Type.INSECTFOOD);
             case 4:
-                return Global.genItem(Item.ItemType.CARTON);
+                return Global.genItem(Item.Type.CARTON);
             case 5:
-                return Global.genItem(Item.ItemType.SEAWEED);
+                return Global.genItem(Item.Type.SEAWEED);
             case 6:
-                return Global.genItem(Item.ItemType.WOODHOUSE);
-            case 7:
-                return Global.genItem(Item.ItemType.BAGADDING);
-            case 8:
-                return Global.genItem(Item.ItemType.ANIMALROOMADDING);
+                return Global.genItem(Item.Type.WOODHOUSE);
+            default:
+                return null;
+        }
+    }
+
+    public BufferItem genBuyingBuffItem(int choice) {
+        switch (choice) {
+            case 1:
+                return (BufferItem) Global.genItem(Item.Type.BAGADDING);
+            case 2:
+                return (BufferItem) Global.genItem(Item.Type.ANIMALROOMADDING);
+            default:
+                return null;
+        }
+    }
+
+    public Animal genBuyingAnimal(int choice, String name) {
+        switch (choice) {
+            case 1:
+                return Global.genAnimal(Animal.Type.DOG, name);
+            case 2:
+                return Global.genAnimal(Animal.Type.CAT, name);
+            case 3:
+                return Global.genAnimal(Animal.Type.FISH, name);
+            case 4:
+                return Global.genAnimal(Animal.Type.INSECT, name);
             default:
                 return null;
         }

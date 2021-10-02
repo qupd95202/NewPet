@@ -1,6 +1,6 @@
 package Animal;
 
-import Game.Item;
+import Item.Item;
 
 public class Insect extends Animal {
     public Insect(String name) {
@@ -10,8 +10,8 @@ public class Insect extends Animal {
          * 基本屬性、生命狀態
          * 種類、喜愛裝飾
          */
-        setType(Type.INSECT);
-        setFavoriteDecoration(Item.ItemType.CARTON);
+        setType(Animal.Type.INSECT);
+        setFavoriteDecoration(Item.Type.CARTON);
 
         /**
          * 睡眠狀態
@@ -27,7 +27,7 @@ public class Insect extends Animal {
         setConsumption(1);
         setHungryFrequency(4);
         setHungry2DieLimit(10);
-        setEatable(Item.ItemType.INSECTFOOD);
+        setEatable(Item.Type.INSECTFOOD);
 
         /**
          * 排泄狀態
@@ -53,7 +53,7 @@ public class Insect extends Animal {
          * 產出物品頻率
          */
         setDropFrequency(4);
-        setItemList(Item.ItemType.SAWDUST);
+        setItemList(Item.Type.SAWDUST);
     }
 
     @Override
@@ -65,7 +65,8 @@ public class Insect extends Animal {
     }
 
     @Override
-    public void walk() {
+    public boolean walk() {
+        return false;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package Animal;
 
-import Game.Item;
+import Item.Item;
 
 public class Fish extends Animal {
     public Fish(String name) {
@@ -10,8 +10,8 @@ public class Fish extends Animal {
          * 基本屬性、生命狀態
          * 種類、喜愛裝飾
          */
-        setType(Type.FISH);
-        setFavoriteDecoration(Item.ItemType.SEAWEED);
+        setType(Animal.Type.FISH);
+        setFavoriteDecoration(Item.Type.SEAWEED);
 
         /**
          * 睡眠狀態
@@ -34,7 +34,7 @@ public class Fish extends Animal {
          */
         setExcretionFrequency(2);
         setDirty2DieLimit(20);
-        setEatable(Item.ItemType.FISHFOOD);
+        setEatable(Item.Type.FISHFOOD);
 
         /**
          * 無聊狀態
@@ -53,7 +53,7 @@ public class Fish extends Animal {
          * 產出物品頻率
          */
         setDropFrequency(7);
-        setItemList(Item.ItemType.FISHSCALE);
+        setItemList(Item.Type.FISHSCALE);
     }
 
     @Override
@@ -65,7 +65,9 @@ public class Fish extends Animal {
      * 不會睡覺
      */
     @Override
-    public void walk(){}
+    public boolean walk(){
+        return false;
+    }
 
     @Override
     public int getBuyInPrice() {

@@ -5,9 +5,10 @@ import java.util.Scanner;
 
 public class Input {
 
-    public static Scanner sc = new Scanner(System.in);
+    public static Scanner sc;
 
     public static int genNumber(int min, int max) {
+        sc = new Scanner(System.in);
         int number = 0;
         try {
             number = sc.nextInt();
@@ -26,15 +27,17 @@ public class Input {
         return genNumber(0, Global.BUYING_MAX_AMOUNT);
     }
 
-    public static String word() {
-        String word = sc.nextLine();
-        if (word.length() > Global.NAME_LIMIT) {
-            return word();
+    public static String namingWord() {
+        sc = new Scanner(System.in);
+        String name = sc.nextLine();
+        if (name.length() > Global.NAME_LIMIT) {
+            System.out.println("不可以超過8個字喔!");
+            return namingWord();
         }
-        int leftNumber = Global.NAME_LIMIT - word.length();
+        int leftNumber = Global.NAME_LIMIT - name.length();
         for (int i = 0; i < leftNumber; i++) {
-            word += " ";
+            name += " ";
         }
-        return word;
+        return name;
     }
 }

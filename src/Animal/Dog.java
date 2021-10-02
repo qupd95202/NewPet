@@ -1,6 +1,6 @@
 package Animal;
 
-import Game.Item;
+import Item.Item;
 
 public class Dog extends Animal{
     public Dog(String name){
@@ -9,8 +9,8 @@ public class Dog extends Animal{
          * 基本屬性、生命狀態
          * 種類、喜愛裝飾
          */
-        setType(Type.DOG);
-        setFavoriteDecoration(Item.ItemType.WOODHOUSE);
+        setType(Animal.Type.DOG);
+        setFavoriteDecoration(Item.Type.WOODHOUSE);
         /**
          * 飢餓狀態
          * 食量、飢餓頻率、餓死步數、餵食時間、過飽狀態
@@ -18,7 +18,7 @@ public class Dog extends Animal{
         setConsumption(2);
         setHungryFrequency(4);
         setHungry2DieLimit(4);
-        setEatable(Item.ItemType.CANNEDFOOD);
+        setEatable(Item.Type.CANNEDFOOD);
         /**
          * 排泄狀態
          * 排泄頻率、排泄數量、髒死步數
@@ -47,7 +47,7 @@ public class Dog extends Animal{
          * 產出物品頻率
          */
         setDropFrequency(5);
-        setItemList(Item.ItemType.DOGHAIR);
+        setItemList(Item.Type.DOGHAIR);
     }
 
 

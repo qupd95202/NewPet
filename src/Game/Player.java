@@ -1,23 +1,64 @@
 package Game;
 
-import BuffItem.Usable;
 import Animal.*;
+import Item.*;
 
 import java.util.ArrayList;
 
 
 public class Player {
-    private ArrayList<Item> bag = new ArrayList<Item>();
-    private int bagMax = 10;
-    private int animalRoomMax = 10;
+    private ArrayList<Item> bag;
+    private ArrayList<Animal> animalRoom;
+    private int bagMax;
+    private int animalRoomMax;
     private int money;
-    private ArrayList<Animal> animalRoom = new ArrayList<>();
-//    private int actionTime = 0;
 
-    public Player() {
-        money = 1000;
+    public enum Status {
+        SUCCESSFUL,
+        NO_MONEY,
+        NO_SPACE,
+        NO_ITEM,
+        NO_AMOUNT;
     }
 
+    public enum basicAction {
+        WALK,
+        FEED,
+        CLEAN,
+        CONNECT,
+        DECORATE,
+        DISCONNECT,
+        NEXT;
+    }
+
+    public Player() {
+        money = Global.INITIAL_MONEY;
+        bag = new ArrayList<Item>();
+        animalRoom = new ArrayList<>();
+        bagMax = 10;
+        animalRoomMax = 10;
+    }
+
+    //////BUY////////
+
+    /**
+     * 購買道具
+     *
+     * @param item
+     * @param amount
+     * @return
+     */
+    public Status buyItem(Item item, int amount) {
+        if (!isBagEnough(item, amount)) {
+            return Status.NO_SPACE;
+        }
+        if (!isMoneyEnough(money, item, amount)) {
+            return Status.NO_MONEY;
+        }
+        addItem(item, amount);
+        costMoney(howMuch(item, amount));
+        return Status.SUCCESSFUL;
+    }
 
     /**
      * 檢查是否有重複的道具
@@ -60,6 +101,21 @@ public class Player {
     }
 
     /**
+     * 檢查錢是否足夠購買的總金額
+     *
+     * @param money  player持有的錢
+     * @param item   購買的物品
+     * @param amount 購買數量
+     * @return
+     */
+    public boolean isMoneyEnough(int money, Item item, int amount) {
+        if (money - (item.getBuyPrice() * amount) < 0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 放入物品
      *
      * @param addingItem
@@ -86,29 +142,19 @@ public class Player {
     }
 
     /**
-     * 選擇一個寵物
+     * 購買寵物
      *
-     * @param index
-     * @return
+     * @param animal
      */
-    public Animal chooseAnimal(int index) {
-        if (index > animalRoom.size()) {
-            return null;
+    public Status buyAnimal(Animal animal) {
+        if (money < animal.getBuyInPrice()) {
+            return Status.NO_MONEY;
         }
-        return animalRoom.get(index - 1);
-    }
-
-    /**
-     * 選擇一個道具
-     *
-     * @param index
-     * @return
-     */
-    public Item chooseItem(int index) {
-        if (index > bag.size()) {
-            return null;
+        if (addAnimal(animal)) {
+            costMoney(animal.getBuyInPrice());
+            return Status.SUCCESSFUL;
         }
-        return bag.get(index - 1);
+        return Status.NO_SPACE;
     }
 
     /**
@@ -125,12 +171,75 @@ public class Player {
     }
 
     /**
-     * 幫寵物取名
-     *
-     * @param animal
+     * 購買加成道具
      */
-    public void naming(Animal animal, String name) {
-        animal.setName(name);
+    public Status buyBuffItem(BufferItem buffItem) {
+        if (money < buffItem.getBuyPrice()) {
+            return Status.NO_MONEY;
+        }
+        if (buffItem.getType() == Item.Type.ANIMALROOMADDING) {
+            animalRoomMax++;
+        }
+        if (buffItem.getType() == Item.Type.BAGADDING) {
+            bagMax++;
+        }
+        costMoney(buffItem.getBuyPrice());
+        return Status.SUCCESSFUL;
+    }
+
+
+    //////SELL//////
+
+    /**
+     * 賣出物品
+     *
+     * @param item   要賣的商品
+     * @param amount 要賣得數量
+     */
+    public Status sell(Item item, int amount) {
+        //是否擁有此物品
+        if (theSameItem(item) == null) {
+            return Status.NO_ITEM;
+        } else {
+            Item itemForSell = theSameItem(item);
+            //擁有此物品得數量是否足夠
+            if (amount > itemForSell.getAmount()) {
+                return Status.NO_AMOUNT;
+            } else {
+                //獲得販售的錢
+                addMoney(howMuch(item, amount));
+                //扣除擁有的物品
+                itemAmountMinus(itemForSell, amount);
+                return Status.SUCCESSFUL;
+            }
+        }
+    }
+
+
+    /**
+     * 選擇寵物房裡的一個寵物
+     *
+     * @param index
+     * @return
+     */
+    public Animal chooseAnimal(int index) {
+        if (index > animalRoom.size()) {
+            return null;
+        }
+        return animalRoom.get(index - 1);
+    }
+
+    /**
+     * 選擇背包裡的一個道具
+     *
+     * @param index
+     * @return
+     */
+    public Item chooseItem(int index) {
+        if (index > bag.size()) {
+            return null;
+        }
+        return bag.get(index - 1);
     }
 
     /**
@@ -138,19 +247,23 @@ public class Player {
      *
      * @param animal
      */
-    public void walking(Animal animal) {
-        animal.walk();
+    public boolean walk(Animal animal) {
+        return animal.walk();
     }
 
     /**
      * 餵寵物吃東西
      *
      * @param animal
-     * @param item
+     * @param food
      * @return
      */
-    public boolean feed(Animal animal, Item item) {
-        return animal.eat(item.getType());
+    public boolean feed(Animal animal, Food food) {
+        if (animal.eat(food)) {
+            itemAmountMinus(food);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -165,7 +278,7 @@ public class Player {
     }
 
     /**
-     * 選擇兩隻寵物取消連結
+     * 選擇一隻寵物取消連結
      *
      * @param animal
      * @return
@@ -177,7 +290,12 @@ public class Player {
     /**
      * 裝飾寵物房間
      */
-    public boolean decorate(Animal animal, Item item) { ///////><
+    public boolean decorate(Animal animal, Item item) {
+        if (animal.getDecoration() != null) {
+            return false;
+        }
+        animal.setDecoration(item);
+        itemAmountMinus(item);
         return true;
     }
 
@@ -187,7 +305,7 @@ public class Player {
      * @return
      */
     public void clean(Animal animal) {
-       animal.clean();
+        animal.clean();
     }
 
     /**
@@ -196,8 +314,13 @@ public class Player {
      * @return
      */
     public boolean isGameOver() {
+        if (animalRoom.size() == 0) { //沒寵物
+            return true;
+        }
         for (Animal animal : animalRoom) {
-            animal.
+            if (animal.getStatus() == Animal.Status.ALIVE) {  //有無死光
+                return false;
+            }
         }
         return true;
     }
@@ -212,7 +335,7 @@ public class Player {
             return false;
         }
         for (Item item : bag) {
-            System.out.println(item.getName() + ": " + item.getAmount() + "個    用途:" + item.getUsage());
+            System.out.println(item.itemInformation());
         }
         return true;
     }
@@ -222,39 +345,40 @@ public class Player {
      *
      * @return
      */
-    public boolean printAllAnimal() {
-        return true;
+    public void printAllAnimal() {
+        animalRoom.forEach(animal -> System.out.println(animal));
     }
 
     /**
-     * 使用加成道具
+     * 使用物品減少
      *
-     * @param usable
+     * @param item
      */
-    public void use(Usable usable) {
-        if (((Item) usable).getType() == Global.ItemType.ANIMALROOMADDING) {
-            animalRoomMax += usable.getBuffNumber();
-        }
-        if (((Item) usable).getType() == Global.ItemType.BAGADDING) {
-            bagMax += usable.getBuffNumber();
+    public void itemAmountMinus(Item item) {
+        item.addAmount(-1);
+        if (item.getAmount() == 0) {
+            bag.remove(item);
         }
     }
 
     /**
-     * 動作時間增加
+     * 使用物品減少(大量)
+     *
+     * @param item
+     * @param amount
      */
-//    public void nextAction() {
-//        actionTime++;
-//    }
+    public void itemAmountMinus(Item item, int amount) {
+        item.addAmount(-amount);
+        if (item.getAmount() == 0) {
+            bag.remove(item);
+        }
+    }
 
     /**
-     * 取得動作時間
+     * 擁有的錢
      *
      * @return
      */
-//    public int getActionTime() {
-//        return actionTime;
-//    }
     public int getMoney() {
         return money;
     }
@@ -276,6 +400,17 @@ public class Player {
     }
 
     /**
+     * 計算多少錢
+     *
+     * @param item
+     * @param amount
+     * @return
+     */
+    public int howMuch(Item item, int amount) {
+        return item.getBuyPrice() * amount;
+    }
+
+    /**
      * 批量選擇寵物
      *
      * @return
@@ -294,6 +429,14 @@ public class Player {
             }
         }
         return animals;
+    }
+
+    /**
+     * 進行一個動作
+     */
+    public void next() {
+        animalRoom.forEach(animal ->
+                animal.update());
     }
 
     //    public void addItem(Items addingItem, int amount) {

@@ -1,72 +1,139 @@
 package Game;
 
-import Animal.Animal;
-import BuffItem.AnimalRoomAdding;
-import BuffItem.BagAdding;
-import Decoration.Carton;
-import Decoration.Seaweed;
-import Decoration.WoodHouse;
-import Drops.CatHair;
-import Drops.DogHair;
-import Drops.FishScale;
-import Food.CannedFood;
-import Food.Fishfood;
-import Food.InsectFood;
+import Animal.*;
+import Item.*;
+
 
 public class Global {
     public final static int INITIAL_FOOD_AMOUNT = 5;
     public final static int BUYING_MAX_AMOUNT = 20;
     public static final int ITEM_MAX_AMOUNT = 20;
     public final static int NAME_LIMIT = 8;
+    public final static int INITIAL_MONEY = 100;
 
-    public enum AnimalType {
-        CAT,
-        DOG,
-        FISH,
-        Insect;
-    }
+    public static Item genItem(Item.Type type) {
 
-    public static Item genItem(Item.ItemType itemType) {
-        if (itemType == Item.ItemType.BAGADDING) {
-            return new BagAdding();
+        if (type == Item.Type.BAGADDING) {
+            return new BufferItem(new Item.Builder()
+                    .setBuyPrice(10)
+                    .setName("擴增背包格")
+                    .setUsage("背包格+1")
+                    .setType(Item.Type.BAGADDING), 1
+            );
         }
-        if (itemType == Item.ItemType.ANIMALROOMADDING) {
-            return new AnimalRoomAdding();
+        if (type == Item.Type.ANIMALROOMADDING) {
+            return new BufferItem(new Item.Builder()
+                    .setBuyPrice(10)
+                    .setName("擴增寵物格")
+                    .setUsage("寵物格+1")
+                    .setType(Item.Type.ANIMALROOMADDING), 1
+            );
         }
-        if (itemType == Item.ItemType.CARTON) {
-            return new Carton();
+        if (type == Item.Type.CARTON) {
+            return new Item.Builder()
+                    .setBuyPrice(3)
+                    .setSellPrice(1)
+                    .setName("紙箱")
+                    .setUsage("裝飾在寵物屋中，每個" +
+                            "寵物屋限放一個")
+                    .setType(Item.Type.CARTON)
+                    .gen();
         }
-        if (itemType == Item.ItemType.SEAWEED) {
-            return new Seaweed();
+        if (type == Item.Type.SEAWEED) {
+            return new Item.Builder()
+                    .setBuyPrice(3)
+                    .setSellPrice(1)
+                    .setName("海草")
+                    .setUsage("裝飾在寵物屋中，每個" +
+                            "寵物屋限放一個")
+                    .setType(Item.Type.SEAWEED)
+                    .gen();
         }
-        if (itemType == Item.ItemType.WOODHOUSE) {
-            return new WoodHouse();
+        if (type == Item.Type.WOODHOUSE) {
+            return new Item.Builder()
+                    .setBuyPrice(4)
+                    .setSellPrice(2)
+                    .setName("木屋")
+                    .setUsage("裝飾在寵物屋中，每個" +
+                            "寵物屋限放一個")
+                    .setType(Item.Type.WOODHOUSE)
+                    .gen();
         }
-        if (itemType == Item.ItemType.CATHAIR) {
-            return new CatHair();
+        if (type == Item.Type.CATHAIR) {
+            return new Item.Builder()
+                    .setSellPrice(1)
+                    .setName("貓毛")
+                    .setUsage("貓咪的毛，聽說可賣錢")
+                    .setType(Item.Type.CATHAIR)
+                    .gen();
         }
-        if (itemType == Item.ItemType.DOGHAIR) {
-            return new DogHair();
+        if (type == Item.Type.DOGHAIR) {
+            return new Item.Builder()
+                    .setSellPrice(2)
+                    .setName("狗毛")
+                    .setUsage("狗狗的毛，聽說可賣錢")
+                    .setType(Item.Type.DOGHAIR)
+                    .gen();
         }
-        if (itemType == Item.ItemType.FISHSCALE) {
-            return new FishScale();
+        if (type == Item.Type.FISHSCALE) {
+            return new Item.Builder()
+                    .setSellPrice(3)
+                    .setName("魚鱗")
+                    .setUsage("美麗的鱗片，頗為值錢")
+                    .setType(Item.Type.FISHSCALE)
+                    .gen();
         }
-        if (itemType == Item.ItemType.SAWDUST) {
-            return new Seaweed();
+        if (type == Item.Type.SAWDUST) {
+            return new Item.Builder()
+                    .setSellPrice(1)
+                    .setName("木屑")
+                    .setUsage("蟲蟲吃剩的，可賣錢")
+                    .setType(Item.Type.SAWDUST)
+                    .gen();
         }
-        if (itemType == Item.ItemType.CANNEDFOOD) {
-            return new CannedFood();
+        if (type == Item.Type.CANNEDFOOD) {
+            return new Food(new Item.Builder()
+                    .setBuyPrice(5)
+                    .setSellPrice(2)
+                    .setName("罐頭飼料")
+                    .setUsage("只能給貓及狗吃")
+                    .setType(Item.Type.CANNEDFOOD)
+            );
         }
-        if (itemType == Item.ItemType.FISHFOOD) {
-            return new Fishfood();
+        if (type == Item.Type.FISHFOOD) {
+            return new Food(new Item.Builder()
+                    .setBuyPrice(4)
+                    .setSellPrice(1)
+                    .setName("魚飼料")
+                    .setUsage("只能給魚吃")
+                    .setType(Item.Type.FISHFOOD)
+            );
         }
-        if (itemType == Item.ItemType.INSECTFOOD) {
-            return new InsectFood();
+        if (type == Item.Type.INSECTFOOD) {
+            return new Food(new Item.Builder()
+                    .setBuyPrice(4)
+                    .setSellPrice(1)
+                    .setName("昆蟲飼料")
+                    .setUsage("只能給昆蟲吃")
+                    .setType(Item.Type.INSECTFOOD)
+            );
         }
         return null;
     }
 
-    public static Animal genAnimal() {
+    public static Animal genAnimal(Animal.Type type, String name) {
+        if (type == Animal.Type.DOG) {
+            return new Dog(name);
+        }
+        if (type == Animal.Type.CAT) {
+            return new Cat(name);
+        }
+        if (type == Animal.Type.FISH) {
+            return new Fish(name);
+        }
+        if (type == Animal.Type.INSECT) {
+            return new Insect(name);
+        }
         return null;
     }
 

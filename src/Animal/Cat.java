@@ -1,6 +1,7 @@
 package Animal;
 
-import Game.Item;
+import Game.Global;
+import Item.*;
 
 public class Cat extends Animal {
     public Cat(String name) {
@@ -10,8 +11,8 @@ public class Cat extends Animal {
          * 基本屬性、生命狀態
          * 種類、喜愛裝飾
          */
-        setType(Type.CAT);
-        setFavoriteDecoration(Item.ItemType.CARTON);
+        setType(Animal.Type.CAT);
+        setFavoriteDecoration(Item.Type.CARTON);
 
         /**
          * 睡眠狀態
@@ -27,7 +28,7 @@ public class Cat extends Animal {
         setConsumption(1);
         setHungryFrequency(3);
         setHungry2DieLimit(3);
-        setEatable(Item.ItemType.CANNEDFOOD);
+        setEatable(Item.Type.CANNEDFOOD);
 
         /**
          * 排泄狀態
@@ -53,7 +54,7 @@ public class Cat extends Animal {
          * 產出物品頻率
          */
         setDropFrequency(6);
-        setItemList(Item.ItemType.CATHAIR);
+        setItemList(Item.Type.CATHAIR);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class Cat extends Animal {
             case FISH -> {
                 if (getSatiety() == Satiety.STARVING) {
                     mate.setStatus(Status.BEEATED2DIE);// 魚被吃死
-                    eat(Item.ItemType.CANNEDFOOD);// 貓被餵食
+                    eat(((Food) Global.genItem(Item.Type.CANNEDFOOD)));// 貓被餵食
                 }
             }
             // 當貓與昆蟲放在一起時，當貓處於無聊狀態，則昆蟲會死亡，貓會被散步一次

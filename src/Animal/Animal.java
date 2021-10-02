@@ -1,11 +1,10 @@
 package Animal;
 
-import Game.Item;
-import Game.Tradable;
+import Item.*;
 
 import java.util.ArrayList;
 
-public abstract class Animal implements Walkable, Sleepable, Tradable {
+public abstract class Animal implements Walkable, Sleepable {
     /**
      * 共24屬性
      * 父類別設定10個屬性
@@ -17,7 +16,7 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
     private Type type;
     private Gender gender;
     private int feeling;
-    private Item.ItemType favoriteDecoration;
+    private Item.Type favoriteDecoration;
     private Item decoration;
 
 
@@ -82,7 +81,7 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
     private int hungryTime;// 飢餓倒數
     private int hungryFrequency;
     private int hungry2DieLimit;
-    private Item.ItemType eatable;
+    private Item.Type eatable;
 
     public enum Satiety {
         STARVING("飢餓狀態"),
@@ -100,7 +99,7 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
         }
     }
 
-    public void setEatable(Item.ItemType eatable) {
+    public void setEatable(Item.Type eatable) {
         this.eatable = eatable;
     }
 
@@ -190,7 +189,7 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
      */
     private int startDrop;
     private int dropFrequency;
-    private Item.ItemType dropItem;
+    private Item.Type dropItem;
 
     public Animal(String name) {
         this.name = name;
@@ -215,13 +214,13 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
      */
     private boolean hasEat = false;
 
-    public boolean eat(Item.ItemType itemType) {
+    public boolean eat(Food food) {
         // 若為睡眠狀態則不能吃
         if (isSleep) {
             return false;
         }
         // 不能吃就不能吃
-        if (eatable != itemType) {
+        if (eatable != food.getType()) {
             return false;
         }
         // 判斷不同飽食度下進行餵食動作
@@ -370,8 +369,12 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
      * 操作無聊 散步
      */
     @Override
-    public void walk() {
+    public boolean walk() {
+        if (isSleep) {
+            return false;
+        }
         startBored = 0;
+        return true;
     }
 
     @Override
@@ -442,6 +445,8 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
         str.append(mate);
         str.append("\n掉落物:");
         str.append(dropItem.getName());
+        str.append("\n當前裝飾:");
+        str.append(decoration.getName());
         str.append("\n");
         return str.toString();
     }
@@ -475,7 +480,7 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
         this.consumption = consumption;
     }
 
-    public void setFavoriteDecoration(Item.ItemType favoriteDecoration) {
+    public void setFavoriteDecoration(Item.Type favoriteDecoration) {
         this.favoriteDecoration = favoriteDecoration;
     }
 
@@ -503,6 +508,10 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
         return boredom;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public int getBoredFrequency() {
         if (feeling > 10) {
             return boredFrequency + 2;
@@ -526,8 +535,16 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
         return pregnantTime;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
     public void setPregnantTime(int pregnantTime) {
         this.pregnantTime = pregnantTime;
+    }
+
+    public Gender getGender() {
+        return gender;
     }
 
     public int getConnectedTime() {
@@ -550,15 +567,26 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
         this.dropFrequency = dropFrequency;
     }
 
-    public void setItemList(Item.ItemType itemType) {
-        this.dropItem = itemType;
+    public void setItemList(Item.Type type) {
+        this.dropItem = type;
     }
 
-    public Item.ItemType getEatable() {
+    public int getFeeling() {
+        if (decoration.getType() == favoriteDecoration) {
+            return feeling + 2;
+        }
+        return feeling;
+    }
+
+    public Item getDecoration() {
+        return decoration;
+    }
+
+    public Item.Type getEatable() {
         return eatable;
     }
 
-    public Item.ItemType getDropItem() {
+    public Item.Type getDropItem() {
         return dropItem;
     }
 
@@ -566,12 +594,10 @@ public abstract class Animal implements Walkable, Sleepable, Tradable {
         return satiety;
     }
 
-    @Override
     public int getBuyInPrice() {
         return 0;
     }
 
-    @Override
     public int getSellOutPrice() {
         return 0;
     }
